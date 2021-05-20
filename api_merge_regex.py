@@ -34,6 +34,20 @@ for date in dates:
     aud.append(au)
 
 
+# Display chart of the rates for the currencies
+plt.figure(figsize=(15,5))
+
+plt.plot(dates, gbp, marker='o')
+plt.plot(dates, cad, marker='o')
+plt.plot(dates, usd, marker='o')
+plt.plot(dates, aud, marker='o')
+
+plt.legend(["GBP", "CAD", "USD", "AUD"])
+plt.show()
+
+
+#=======================================================================
+
 
 # Set up dictionary for each date according to its value for GBP currency
 data_gbp = {'date':  dates,
@@ -53,3 +67,21 @@ merged_dataframe = df1.merge(df2, on='date')
 
 # Show merged DataFrame
 print(merged_dataframe)
+
+#=======================================================================
+
+#RegEx
+
+# Import the re module
+import re
+
+string = "The fall of #Watson #Health: How #IBM’s plan to change the face of healthcare with #AI fell apart. Great read by @caseymross @mariojoze @statnews @GersonRolim @intellimetri"
+
+
+# Write the regex
+users = r"@[A-Za-z0-9\W]+"
+hastags = r"\#\w+"
+
+# Find all matches of regex
+print(re.findall(users, string))
+print(re.findall(hastags, string))

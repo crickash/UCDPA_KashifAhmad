@@ -307,7 +307,7 @@ gs = GridSearchCV(RandomForestClassifier(), parameters)
 
 # Label Distribution
 sns.countplot(x="purchase", data=df)
-plt.show()
+#plt.show()
 
 
 # Extract dataset of just True purchase values
@@ -315,7 +315,7 @@ purchase_true = df[df["purchase"] == True].reset_index()
 
 # Count Plot of purchases by month
 sns.countplot(x="month", data=purchase_true)
-plt.show()
+#plt.show()
 
 
 # Correlation Heatmap
@@ -323,4 +323,46 @@ plt.figure(figsize=(12,10))
 cor = df.corr()
 sns.heatmap(cor, annot=True)
 plt.title("Correlation")
-plt.show()
+#plt.show()
+
+
+
+# Compare bounce_rate against exit_Rate on the complete dataset
+sns.scatterplot(data=df, x="bounce_rate", y="exit_rate")
+#plt.show()
+
+# # Compare bounce_rate against exit_Rate on only the True purchase dataset
+sns.scatterplot(data=purchase_true, x="bounce_rate", y="exit_rate")
+#plt.show()
+
+
+
+# Compute accuracy score against the number of neighbors for the KNN Classifier
+# Setup arrays to store train and test accuracies
+neighbors = np.arange(1, 9)
+train_accuracy = np.empty(len(neighbors))
+test_accuracy = np.empty(len(neighbors))
+
+# Loop over different values of k
+for i, k in enumerate(neighbors):
+    # Setup a k-NN Classifier with k neighbors: knn
+    knn = KNeighborsClassifier(n_neighbors=k)
+
+    # Fit the classifier to the training data
+    knn.fit(X_train, y_train)
+
+    # Compute accuracy on the training set
+    train_accuracy[i] = knn.score(X_train, y_train)
+
+    # Compute accuracy on the testing set
+    test_accuracy[i] = knn.score(X_test, y_test)
+
+
+# Generate plot
+plt.title('k-NN: Varying Number of Neighbors')
+plt.plot(neighbors, test_accuracy, label='Testing Accuracy')
+plt.plot(neighbors, train_accuracy, label='Training Accuracy')
+plt.legend()
+plt.xlabel('Number of Neighbors')
+plt.ylabel('Accuracy')
+#plt.show()

@@ -1,11 +1,13 @@
+# imports
+
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.metrics import mean_squared_error, classification_report, confusion_matrix, roc_curve
+from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from scipy.stats import randint
 from sklearn.tree import DecisionTreeClassifier
@@ -67,21 +69,21 @@ y_pred = knn.predict(X_test)
 
 
 # --------------------Linear Regressions----------------------
-# Create the regressor: reg_all
-reg_all = LinearRegression()
+# Instantiate a LinearRegression Classifier: linreg
+linreg = LinearRegression()
 
 # Fit the regressor to the training data
-reg_all.fit(X_train, y_train)
+linreg.fit(X_train, y_train)
 
 # Predict on the test data: y_pred
-y_pred = reg_all.predict(X_test)
+y_pred = linreg.predict(X_test)
 
-# print(reg_all.score(X_test, y_test))
+# print(linreg.score(X_test, y_test))
 # --------------------Linear Regressions----------------------
 
 
 # --------------------Logistic Regressions----------------------
-# Create the classifier: logreg
+# Instantiate a LogisticRegression Classifier: logreg
 logreg = LogisticRegression(solver='liblinear')
 
 # Fit the classifier to the training data
@@ -97,7 +99,7 @@ y_pred = logreg.predict(X_test)
 
 
 # --------------------SVC----------------------
-# Create the classifier: SVC
+# Instantiate a SVC Classifier: SVC
 svc = SVC()
 
 # Fit the classifier to the training data
@@ -113,7 +115,7 @@ y_pred = svc.predict(X_test)
 
 
 # --------------------DECISION TREE----------------------
-# Create the classifier: DecisionTreeClassifier
+# Instantiate a DecisionTreeClassifier Classifier: DecisionTreeClassifier
 dt = DecisionTreeClassifier()
 
 # Fit the classifier to the training data
@@ -129,7 +131,7 @@ y_pred = dt.predict(X_test)
 
 
 # --------------------RandomForestClassifier----------------------
-# Create the classifier: RandomForestClassifier
+# Instantiate a RandomForestClassifier Classifier: RandomForestClassifier
 rf = RandomForestClassifier()
 
 # Fit the classifier to the training data
@@ -147,7 +149,7 @@ y_pred = rf.predict(X_test)
 
 
 def comparison(model):
-    # Instantiate and fit a k-NN classifier to the unscaled data
+    # Instantiate and fit the classifier to the unscaled data
     accuracy = model.fit(X_train, y_train)
 
     # Compute and print metrics
@@ -156,10 +158,10 @@ def comparison(model):
 
 
 def scaled_comparison(model):
+    # Create the pipeline: pipeline with scaling and fitting the data
     steps = [('scaler', StandardScaler()),
              ('model', model)]
 
-    # Create the pipeline: pipeline
     pipeline = Pipeline(steps)
 
     # Fit the pipeline to the training set: knn_scaled
@@ -170,6 +172,7 @@ def scaled_comparison(model):
     return
 
 
+# Instantiate Classifiers into variables
 knn = KNeighborsClassifier()
 lin_reg = LinearRegression()
 log_reg = LogisticRegression(solver='liblinear')
@@ -177,12 +180,17 @@ svc = SVC()
 dt = DecisionTreeClassifier()
 rf = RandomForestClassifier()
 
+
+# Classifiers array
 models = [knn, lin_reg, log_reg, svc, dt, rf]
 
+
 for model in models:
+    # call comparison function for each classifier in the models array
     comparison(model)
 
 for model in models:
+    # call scaled_comparison function for each classifier in the models array
     scaled_comparison(model)
 
 # ========================START HYPERPARAMETER TUNING========================
@@ -278,7 +286,7 @@ gs = GridSearchCV(SVC(), parameters)
 
 
 # --------------------RandomForestClassifier----------------------
-# Setup the parameters and distributions to sample from: param_dist
+# Specify the hyperparameter space
 parameters = {"n_estimators": [1, 10, 25, 50, 70, 100],
               "max_features": ["auto", "sqrt", "log2"],
               "min_samples_leaf": range(1, 9),

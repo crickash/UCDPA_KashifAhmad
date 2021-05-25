@@ -1,10 +1,10 @@
-# Merge DataFrames
-
 # imports
 import requests
 import matplotlib.pyplot as plt
 import pandas as pd
+import re
 
+#====================API====================
 # Set up dates list to retrieve currency conversion rate for these dates
 dates = ["2020-05-18", "2020-06-18", "2020-07-18", "2020-08-18", "2020-09-18", "2020-10-18", "2020-11-18", "2020-12-18", "2021-01-18", "2021-02-18", "2021-03-18", "2021-04-18"]
 
@@ -14,9 +14,9 @@ cad = []
 usd = []
 aud = []
 
-# Request API for each dat
+# Request API for each date
 for date in dates:
-    request = requests.get("https://api.ratesapi.io/api/"+date)
+    request = requests.get("http://api.exchangeratesapi.io/v1/"+date+"?access_key=48426be9e5c8e77f26b04c324cace3f2")
 
     # convert raw data into JSON format
     data = request.json()
@@ -43,10 +43,10 @@ plt.plot(dates, usd, marker='o')
 plt.plot(dates, aud, marker='o')
 
 plt.legend(["GBP", "CAD", "USD", "AUD"])
-plt.show()
+#plt.show()
 
 
-#=======================================================================
+#====================MERGE DATAFRAMES====================
 
 
 # Set up dictionary for each date according to its value for GBP currency
@@ -66,14 +66,11 @@ df2 = pd.DataFrame (data_usd, columns = ['date','USD'])
 merged_dataframe = df1.merge(df2, on='date')
 
 # Show merged DataFrame
-print(merged_dataframe)
+#print(merged_dataframe)
 
-#=======================================================================
 
-#RegEx
 
-# Import the re module
-import re
+#====================REGEX====================
 
 string = "The fall of #Watson #Health: How #IBM’s plan to change the face of healthcare with #AI fell apart. Great read by @caseymross @mariojoze @statnews @GersonRolim @intellimetri"
 
@@ -83,5 +80,5 @@ users = r"@[A-Za-z0-9\W]+"
 hastags = r"\#\w+"
 
 # Find all matches of regex
-print(re.findall(users, string))
-print(re.findall(hastags, string))
+#print(re.findall(users, string))
+#print(re.findall(hastags, string))

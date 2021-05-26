@@ -16,7 +16,13 @@ aud = []
 
 # Request API for each date
 for date in dates:
+    """ the API usage limit is reset at the end of every month
+    however it is not known if the API key is also reset
+    therefore it is a possibility that API will not run if access key is also reset on 1st June """
     request = requests.get("http://api.exchangeratesapi.io/v1/"+date+"?access_key=48426be9e5c8e77f26b04c324cace3f2")
+
+    # verify status code
+    #print(request.status_code)
 
     # convert raw data into JSON format
     data = request.json()
